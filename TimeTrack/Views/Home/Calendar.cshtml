@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Calendar";
+}
+@Styles.Render("~/Content/calendar")
+
+<div id="calendar"></div>
+<div id="event_edit_container">
+    <form>
+        <input type="hidden" />
+        <ul>
+            <li>
+                <span>Date: </span><span class="date_holder"></span>
+                <br />
+            </li>
+            <li>
+                <span>Client: </span>
+                <select name="client">
+                    <option value="">Select Client</option>
+                    @foreach (Time.Data.Client iclient in (ICollection<Time.Data.Client>)ViewData["Clients"])
+                    {
+                        <option value="@iclient.id">@iclient.strTitle</option>
+                    }
+                </select>
+            </li>
+            <li>
+                <span>Product: </span>
+                <select name="product">
+                    <option value="">Select Product</option>
+                    @foreach (Time.Data.Product prod in (ICollection<Time.Data.Product>)ViewData["Products"])
+                    {
+                        <option value="@prod.id">@prod.strTitle</option>
+                    }
+                </select>
+            </li>
+            <li>
+                <span>Project: </span>
+                <select name="project">
+                    <option value="">Select Project</option>
+                    @foreach (Time.Data.Proyect proy in (ICollection<Time.Data.Proyect>)ViewData["Proyects"])
+                    {
+                        <option value="@proy.id">@proy.strTitle</option>
+                    }
+                </select>
+            </li>
+            <li>
+                <span>Service Type: </span>
+                <select name="service">
+                    <option value="">Select Service</option>
+                    @foreach (Time.Data.Service service in (ICollection<Time.Data.Service>)ViewData["Services"])
+                    {
+                        <option value="@service.id">@service.strTitle</option>
+                    }
+                </select>
+            </li>
+            <li>
+                <label for="start">Start Time: </label><select name="start"><option value="">Select Start Time</option></select>
+            </li>
+            <li>
+                <label for="end">End Time: </label><select name="end"><option value="">Select End Time</option></select>
+            </li>
+            <li>
+                <label for="title">Title: </label><input type="text" name="title" />
+            </li>
+            <li>
+                <label for="body">Body: </label><textarea name="body"></textarea>
+            </li>
+        </ul>
+    </form>
+</div>
+
+
+@Scripts.Render("~/bundles/schedulecalendar")
+@Scripts.Render("~/bundles/bootstrap")
+
+
+
+

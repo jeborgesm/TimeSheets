@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="TimeRegistry">
+  <DataContextMoniker Name="/TimeRegistryDataContext" />
+  <nestedChildShapes>
+    <classShape Id="e38566b8-a70e-43e6-9232-412a8f696625" absoluteBounds="0.5, 6.125, 2, 1.0961531575520835">
+      <DataClassMoniker Name="/TimeRegistryDataContext/Capital_Proyect" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d4cfe9d4-5ea2-44ce-b375-4c252c3feba1" absoluteBounds="0.51500000000000012, 6.5850000000000009, 1.9700000000000002, 0.53615315755208326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7550e5ef-c181-4a95-8c2e-b87b27a94237" absoluteBounds="6.75, 2.875, 2, 2.4109318033854166">
+      <DataClassMoniker Name="/TimeRegistryDataContext/Task" />
+      <nestedChildShapes>
+        <elementListCompartment Id="974f46b1-e09a-4635-8ae6-d6d55e4290cc" absoluteBounds="6.765, 3.335, 1.9700000000000002, 1.8509318033854165" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="941c68db-c976-4cd4-9db7-8fde15db2b64" absoluteBounds="0.5, 1.5, 2, 1.4248478190104166">
+      <DataClassMoniker Name="/TimeRegistryDataContext/Client" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5532589c-c9cc-4958-87a9-7f838ebef00d" absoluteBounds="0.51500000000000012, 1.9600000000000009, 1.9700000000000002, 0.86484781901041674" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a49740a5-c113-4559-991b-6ab988bf95c6" absoluteBounds="0.5, 3.75, 2, 1.2605004882812505">
+      <DataClassMoniker Name="/TimeRegistryDataContext/Product" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8f348384-819c-49db-8e82-fe2c5de88514" absoluteBounds="0.51500000000000012, 4.21, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="446405bd-022b-431d-8e02-19dd915b951d" absoluteBounds="4, 4.875, 2, 1.9178898111979166">
+      <DataClassMoniker Name="/TimeRegistryDataContext/Proyect" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bcb41a72-a60c-4871-a98d-c4ba3d8b22bf" absoluteBounds="4.0150000000000006, 5.335, 1.9700000000000002, 1.3578898111979165" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="35c578ba-7051-4e7d-b2a4-4f4d2f90a39b" absoluteBounds="6.75, 6, 2, 1.4248478190104166">
+      <DataClassMoniker Name="/TimeRegistryDataContext/Resource" />
+      <nestedChildShapes>
+        <elementListCompartment Id="313a2fd3-8b69-4979-95e8-adac5ced8e22" absoluteBounds="6.7650000000000006, 6.46, 1.9700000000000002, 0.86484781901041674" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="53c53553-e52c-4470-a4e6-30c6bd860a78" absoluteBounds="6.625, 1.125, 2, 1.26050048828125">
+      <DataClassMoniker Name="/TimeRegistryDataContext/Service" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c3bf598a-93d8-4093-8177-3075d4af7e19" absoluteBounds="6.6400000000000006, 1.5850000000000009, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(1.5 : 2.92484781901042); (1.5 : 3.75)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TimeRegistryDataContext/Client/Client_Product" />
+      <nodes>
+        <classShapeMoniker Id="941c68db-c976-4cd4-9db7-8fde15db2b64" />
+        <classShapeMoniker Id="a49740a5-c113-4559-991b-6ab988bf95c6" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(6 : 5.08046590169271); (6.75 : 5.08046590169271)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TimeRegistryDataContext/Proyect/Proyect_Task" />
+      <nodes>
+        <classShapeMoniker Id="446405bd-022b-431d-8e02-19dd915b951d" />
+        <classShapeMoniker Id="7550e5ef-c181-4a95-8c2e-b87b27a94237" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.5 : 6.45894490559896); (4 : 6.45894490559896)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TimeRegistryDataContext/Capital_Proyect/Capital_Proyect_Proyect" />
+      <nodes>
+        <classShapeMoniker Id="e38566b8-a70e-43e6-9232-412a8f696625" />
+        <classShapeMoniker Id="446405bd-022b-431d-8e02-19dd915b951d" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.5 : 4.3124995); (5 : 4.3124995); (5 : 4.875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TimeRegistryDataContext/Product/Product_Proyect" />
+      <nodes>
+        <classShapeMoniker Id="a49740a5-c113-4559-991b-6ab988bf95c6" />
+        <classShapeMoniker Id="446405bd-022b-431d-8e02-19dd915b951d" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(7.75 : 6); (7.75 : 5.28593180338542)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TimeRegistryDataContext/Resource/Resource_Task" />
+      <nodes>
+        <classShapeMoniker Id="35c578ba-7051-4e7d-b2a4-4f4d2f90a39b" />
+        <classShapeMoniker Id="7550e5ef-c181-4a95-8c2e-b87b27a94237" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(6.75 : 6.39644490559896); (6 : 6.39644490559896)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TimeRegistryDataContext/Resource/Resource_Proyect" />
+      <nodes>
+        <classShapeMoniker Id="35c578ba-7051-4e7d-b2a4-4f4d2f90a39b" />
+        <classShapeMoniker Id="446405bd-022b-431d-8e02-19dd915b951d" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(7.6875 : 2.38550048828125); (7.6875 : 2.875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TimeRegistryDataContext/Service/Service_Task" />
+      <nodes>
+        <classShapeMoniker Id="53c53553-e52c-4470-a4e6-30c6bd860a78" />
+        <classShapeMoniker Id="7550e5ef-c181-4a95-8c2e-b87b27a94237" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

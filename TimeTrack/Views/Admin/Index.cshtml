@@ -1,0 +1,983 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div ID="TitleContent" runat="server">
+    System Management
+</div>
+
+<div ID="MainContent" runat="server">
+
+    <div style="visibility:hidden" id="seltab"><%=ViewData["seltab"]%></div>
+
+    <div id="tabs">
+        <ul>
+            <li><a id="tabres" href="#tabs-resource">Resources</a></li>
+            <li><a id="tabcli" href="#tabs-client">Clients</a></li>
+            <li><a id="tabprod" href="#tabs-product">Products</a></li>
+            <li><a id="tabproj" href="#tabs-Project">Projects</a></li>
+            <li><a id="tabsrv" href="#tabs-service">Services</a></li>
+        </ul>
+        @*<div id="tabs-resource">
+                @Html.Partial("ResourcesPartial")
+            </div>
+            <div id="tabs-client">
+                @Html.Partial("ClientsPartial")
+            </div>
+            <div id="tabs-product">
+                @Html.Partial("ProductsPartial")
+            </div>
+            <div id="tabs-Project">
+                @Html.Partial("ProjectsPartial")
+            </div>
+            <div id="tabs-service">
+                @Html.Partial("ServicesPartial")
+            </div>*@
+    </div>
+
+</div>
+
+<div ID="JSContent" runat="server">
+
+    <% string virtpath = Request.ApplicationPath.Substring(0, Request.ApplicationPath.Length-1) +  Request.ApplicationPath.Substring(Request.ApplicationPath.Length-1,1).Replace("/","");  %>
+
+</div>
+
+<div id="myGrid"></div>
+
+<style type="text/css">
+    body {
+        color: #566787;
+        background: #f5f5f5;
+        font-family: 'Varela Round', sans-serif;
+        font-size: 13px;
+    }
+
+    .table-wrapper {
+        background: #fff;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 3px;
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+
+    .table-title {
+        padding-bottom: 15px;
+        background: #435d7d;
+        color: #fff;
+        padding: 16px 30px;
+        margin: -20px -25px 10px;
+        border-radius: 3px 3px 0 0;
+    }
+
+        .table-title h2 {
+            margin: 5px 0 0;
+            font-size: 24px;
+        }
+
+        .table-title .btn-group {
+            float: right;
+        }
+
+        .table-title .btn {
+            color: #fff;
+            float: right;
+            font-size: 13px;
+            border: none;
+            min-width: 50px;
+            border-radius: 2px;
+            border: none;
+            outline: none !important;
+            margin-left: 10px;
+        }
+
+            .table-title .btn i {
+                float: left;
+                font-size: 21px;
+                margin-right: 5px;
+            }
+
+            .table-title .btn span {
+                float: left;
+                margin-top: 2px;
+            }
+
+    table.table tr th, table.table tr td {
+        border-color: #e9e9e9;
+        padding: 12px 15px;
+        vertical-align: middle;
+    }
+
+        table.table tr th:first-child {
+            width: 60px;
+        }
+
+        table.table tr th:last-child {
+            width: 100px;
+        }
+
+    table.table-striped tbody tr:nth-of-type(odd) {
+        background-color: #fcfcfc;
+    }
+
+    table.table-striped.table-hover tbody tr:hover {
+        background: #f5f5f5;
+    }
+
+    table.table th i {
+        font-size: 13px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    table.table td:last-child i {
+        opacity: 0.9;
+        font-size: 22px;
+        margin: 0 5px;
+    }
+
+    table.table td a {
+        font-weight: bold;
+        color: #566787;
+        display: inline-block;
+        text-decoration: none;
+        outline: none !important;
+    }
+
+        table.table td a:hover {
+            color: #2196F3;
+        }
+
+        table.table td a.edit {
+            color: #FFC107;
+        }
+
+        table.table td a.delete {
+            color: #F44336;
+        }
+
+    table.table td i {
+        font-size: 19px;
+    }
+
+    table.table .avatar {
+        border-radius: 50%;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    .pagination {
+        float: right;
+        margin: 0 0 5px;
+    }
+
+        .pagination li a {
+            border: none;
+            font-size: 13px;
+            min-width: 30px;
+            min-height: 30px;
+            color: #999;
+            margin: 0 2px;
+            line-height: 30px;
+            border-radius: 2px !important;
+            text-align: center;
+            padding: 0 6px;
+        }
+
+            .pagination li a:hover {
+                color: #666;
+            }
+
+        .pagination li.active a, .pagination li.active a.page-link {
+            background: #03A9F4;
+        }
+
+            .pagination li.active a:hover {
+                background: #0397d6;
+            }
+
+        .pagination li.disabled i {
+            color: #ccc;
+        }
+
+        .pagination li i {
+            font-size: 16px;
+            padding-top: 6px
+        }
+
+    .hint-text {
+        float: left;
+        margin-top: 10px;
+        font-size: 13px;
+    }
+    /* Custom checkbox */
+    .custom-checkbox {
+        position: relative;
+    }
+
+        .custom-checkbox input[type="checkbox"] {
+            opacity: 0;
+            position: absolute;
+            margin: 5px 0 0 3px;
+            z-index: 9;
+        }
+
+        .custom-checkbox label:before {
+            width: 18px;
+            height: 18px;
+        }
+
+        .custom-checkbox label:before {
+            content: '';
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: text-top;
+            background: white;
+            border: 1px solid #bbb;
+            border-radius: 2px;
+            box-sizing: border-box;
+            z-index: 2;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked + label:after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 3px;
+            width: 6px;
+            height: 11px;
+            border: solid #000;
+            border-width: 0 3px 3px 0;
+            transform: inherit;
+            z-index: 3;
+            transform: rotateZ(45deg);
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked + label:before {
+            border-color: #03A9F4;
+            background: #03A9F4;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked + label:after {
+            border-color: #fff;
+        }
+
+        .custom-checkbox input[type="checkbox"]:disabled + label:before {
+            color: #b8b8b8;
+            cursor: auto;
+            box-shadow: none;
+            background: #ddd;
+        }
+    /* Modal styles */
+    .modal .modal-dialog {
+        max-width: 400px;
+    }
+
+    .modal .modal-header, .modal .modal-body, .modal .modal-footer {
+        padding: 20px 30px;
+    }
+
+    .modal .modal-content {
+        border-radius: 3px;
+    }
+
+    .modal .modal-footer {
+        background: #ecf0f1;
+        border-radius: 0 0 3px 3px;
+    }
+
+    .modal .modal-title {
+        display: inline-block;
+    }
+
+    .modal .form-control {
+        border-radius: 2px;
+        box-shadow: none;
+        border-color: #dddddd;
+    }
+
+    .modal textarea.form-control {
+        resize: vertical;
+    }
+
+    .modal .btn {
+        border-radius: 2px;
+        min-width: 100px;
+    }
+
+    .modal form label {
+        font-weight: normal;
+    }
+</style>
+
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>Manage <b>Employees</b></h2>
+                </div>
+                <div class="col-sm-6">
+                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="selectAll">
+                            <label for="selectAll"></label>
+                        </span>
+                    </th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                            <label for="checkbox1"></label>
+                        </span>
+                    </td>
+                    <td>Thomas Hardy</td>
+                    <td>thomashardy@mail.com</td>
+                    <td>89 Chiaroscuro Rd, Portland, USA</td>
+                    <td>(171) 555-2222</td>
+                    <td>
+                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="checkbox2" name="options[]" value="1">
+                            <label for="checkbox2"></label>
+                        </span>
+                    </td>
+                    <td>Dominique Perrier</td>
+                    <td>dominiqueperrier@mail.com</td>
+                    <td>Obere Str. 57, Berlin, Germany</td>
+                    <td>(313) 555-5735</td>
+                    <td>
+                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="checkbox3" name="options[]" value="1">
+                            <label for="checkbox3"></label>
+                        </span>
+                    </td>
+                    <td>Maria Anders</td>
+                    <td>mariaanders@mail.com</td>
+                    <td>25, rue Lauriston, Paris, France</td>
+                    <td>(503) 555-9931</td>
+                    <td>
+                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="checkbox4" name="options[]" value="1">
+                            <label for="checkbox4"></label>
+                        </span>
+                    </td>
+                    <td>Fran Wilson</td>
+                    <td>franwilson@mail.com</td>
+                    <td>C/ Araquil, 67, Madrid, Spain</td>
+                    <td>(204) 619-5731</td>
+                    <td>
+                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="checkbox5" name="options[]" value="1">
+                            <label for="checkbox5"></label>
+                        </span>
+                    </td>
+                    <td>Martin Blank</td>
+                    <td>martinblank@mail.com</td>
+                    <td>Via Monte Bianco 34, Turin, Italy</td>
+                    <td>(480) 631-2097</td>
+                    <td>
+                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="clearfix">
+            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+            <ul class="pagination">
+                <li class="page-item disabled"><a href="#">Previous</a></li>
+                <li class="page-item"><a href="#" class="page-link">1</a></li>
+                <li class="page-item"><a href="#" class="page-link">2</a></li>
+                <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                <li class="page-item"><a href="#" class="page-link">4</a></li>
+                <li class="page-item"><a href="#" class="page-link">5</a></li>
+                <li class="page-item"><a href="#" class="page-link">Next</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal HTML -->
+<div id="addEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Employee</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" value="Add">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal HTML -->
+<div id="editEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Employee</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-info" value="Save">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal HTML -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Employee</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<body id="pager-demo">
+    <div id="banner">
+        <h1>table<em>sorter</em></h1>
+        <h2>Pager plugin + Filter widget</h2>
+        <h3>Flexible client-side table sorting</h3>
+        <a href="index.html">Back to documentation</a>
+    </div>
+
+    <div id="main">
+
+        <p class="tip">
+            <em>NOTE!</em> The following are not part of the original plugin:
+        </p>
+        <ul>
+            <li>
+                In <span class="version updated">v2.23.0</span>, the following methods were changed due to issues with unique namespacing.
+                <ul>
+                    <li><code>destroy.pager</code> is now <code>destroyPager</code></li>
+                    <li><code>disable.pager</code> is now <code>disablePager</code></li>
+                    <li><code>enable.pager</code> is now <code>enablePager</code></li>
+                </ul>
+            </li>
+            <li>When using this pager plugin with the filter widget, make sure that the <code>removeRows</code> option is set to <code>false</code> or it won't work.</li>
+            <li>This combination was not possible in tablesorter versions prior to version 2.4.</li>
+            <li>This combination can not be applied to the original tablesorter.</li>
+        </ul>
+
+        <h1>Demo</h1>
+        <br>
+        <button type="button">Add Rows</button> <button type="button" class="toggle">Disable Pager</button> <button type="button">Destroy Pager</button>
+        <br><br>
+        <div class="pager">
+            Page: <select class="gotoPage"></select>
+            <img src="~/Scripts/Tablesorter/addons/pager/icons/first.png" class="first" alt="First" title="First page" />
+            <img src="~/Scripts/Tablesorter/addons/pager/icons/prev.png" class="prev" alt="Prev" title="Previous page" />
+            <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+            <img src="~/Scripts/Tablesorter/addons/pager/icons/next.png" class="next" alt="Next" title="Next page" />
+            <img src="~/Scripts/Tablesorter/addons/pager/icons/last.png" class="last" alt="Last" title="Last page" />
+            <select class="pagesize">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+            </select>
+        </div>
+
+        <table class="tablesorter">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Major</th>
+                    <th>Sex</th>
+                    <th>English</th>
+                    <th>Japanese</th>
+                    <th>Calculus</th>
+                    <th>Geometry</th>
+                    <th class="filter-false remove sorter-false"></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Major</th>
+                    <th>Sex</th>
+                    <th>English</th>
+                    <th>Japanese</th>
+                    <th>Calculus</th>
+                    <th>Geometry</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+            <tbody>
+                <tr>
+                    <td>Student01</td>
+                    <td>Languages</td>
+                    <td>male</td>
+                    <td>80</td>
+                    <td>70</td>
+                    <td>75</td>
+                    <td>80</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student02</td>
+                    <td>Mathematics</td>
+                    <td>male</td>
+                    <td>90</td>
+                    <td>88</td>
+                    <td>100</td>
+                    <td>90</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student03</td>
+                    <td>Languages</td>
+                    <td>female</td>
+                    <td>85</td>
+                    <td>95</td>
+                    <td>80</td>
+                    <td>85</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student04</td>
+                    <td>Languages</td>
+                    <td>male</td>
+                    <td>60</td>
+                    <td>55</td>
+                    <td>100</td>
+                    <td>100</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student05</td>
+                    <td>Languages</td>
+                    <td>female</td>
+                    <td>68</td>
+                    <td>80</td>
+                    <td>95</td>
+                    <td>80</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student06</td>
+                    <td>Mathematics</td>
+                    <td>male</td>
+                    <td>100</td>
+                    <td>99</td>
+                    <td>100</td>
+                    <td>90</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student07</td>
+                    <td>Mathematics</td>
+                    <td>male</td>
+                    <td>85</td>
+                    <td>68</td>
+                    <td>90</td>
+                    <td>90</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student08</td>
+                    <td>Languages</td>
+                    <td>male</td>
+                    <td>100</td>
+                    <td>90</td>
+                    <td>90</td>
+                    <td>85</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student09</td>
+                    <td>Mathematics</td>
+                    <td>male</td>
+                    <td>80</td>
+                    <td>50</td>
+                    <td>65</td>
+                    <td>75</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student10</td>
+                    <td>Languages</td>
+                    <td>male</td>
+                    <td>85</td>
+                    <td>100</td>
+                    <td>100</td>
+                    <td>90</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student11</td>
+                    <td>Languages</td>
+                    <td>male</td>
+                    <td>86</td>
+                    <td>85</td>
+                    <td>100</td>
+                    <td>100</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student12</td>
+                    <td>Mathematics</td>
+                    <td>female</td>
+                    <td>100</td>
+                    <td>75</td>
+                    <td>70</td>
+                    <td>85</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student13</td>
+                    <td>Languages</td>
+                    <td>female</td>
+                    <td>100</td>
+                    <td>80</td>
+                    <td>100</td>
+                    <td>90</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student14</td>
+                    <td>Languages</td>
+                    <td>female</td>
+                    <td>50</td>
+                    <td>45</td>
+                    <td>55</td>
+                    <td>90</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student15</td>
+                    <td>Languages</td>
+                    <td>male</td>
+                    <td>95</td>
+                    <td>35</td>
+                    <td>100</td>
+                    <td>90</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student16</td>
+                    <td>Languages</td>
+                    <td>female</td>
+                    <td>100</td>
+                    <td>50</td>
+                    <td>30</td>
+                    <td>70</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student17</td>
+                    <td>Languages</td>
+                    <td>female</td>
+                    <td>80</td>
+                    <td>100</td>
+                    <td>55</td>
+                    <td>65</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student18</td>
+                    <td>Mathematics</td>
+                    <td>male</td>
+                    <td>30</td>
+                    <td>49</td>
+                    <td>55</td>
+                    <td>75</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student19</td>
+                    <td>Languages</td>
+                    <td>male</td>
+                    <td>68</td>
+                    <td>90</td>
+                    <td>88</td>
+                    <td>70</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student20</td>
+                    <td>Mathematics</td>
+                    <td>male</td>
+                    <td>40</td>
+                    <td>45</td>
+                    <td>40</td>
+                    <td>80</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student21</td>
+                    <td>Languages</td>
+                    <td>male</td>
+                    <td>50</td>
+                    <td>45</td>
+                    <td>100</td>
+                    <td>100</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr>
+                    <td>Student22</td>
+                    <td>Mathematics</td>
+                    <td>male</td>
+                    <td>100</td>
+                    <td>99</td>
+                    <td>100</td>
+                    <td>90</td>
+                    <td><button type="button" class="remove" title="Remove this row">X</button></td>
+                </tr>
+                <tr><td>Student23</td><td>Mathematics</td><td>male</td><td>82</td><td>77</td><td>0</td><td>79</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student24</td><td>Languages</td><td>female</td><td>100</td><td>91</td><td>13</td><td>82</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student25</td><td>Mathematics</td><td>male</td><td>22</td><td>96</td><td>82</td><td>53</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student26</td><td>Languages</td><td>female</td><td>37</td><td>29</td><td>56</td><td>59</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student27</td><td>Mathematics</td><td>male</td><td>86</td><td>82</td><td>69</td><td>23</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student28</td><td>Languages</td><td>female</td><td>44</td><td>25</td><td>43</td><td>1</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student29</td><td>Mathematics</td><td>male</td><td>77</td><td>47</td><td>22</td><td>38</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student30</td><td>Languages</td><td>female</td><td>19</td><td>35</td><td>23</td><td>10</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student31</td><td>Mathematics</td><td>male</td><td>90</td><td>27</td><td>17</td><td>50</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student32</td><td>Languages</td><td>female</td><td>60</td><td>75</td><td>33</td><td>38</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student33</td><td>Mathematics</td><td>male</td><td>4</td><td>31</td><td>37</td><td>15</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student34</td><td>Languages</td><td>female</td><td>77</td><td>97</td><td>81</td><td>44</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student35</td><td>Mathematics</td><td>male</td><td>5</td><td>81</td><td>51</td><td>95</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student36</td><td>Languages</td><td>female</td><td>70</td><td>61</td><td>70</td><td>94</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student37</td><td>Mathematics</td><td>male</td><td>60</td><td>3</td><td>61</td><td>84</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student38</td><td>Languages</td><td>female</td><td>63</td><td>39</td><td>0</td><td>11</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student39</td><td>Mathematics</td><td>male</td><td>50</td><td>46</td><td>32</td><td>38</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student40</td><td>Languages</td><td>female</td><td>51</td><td>75</td><td>25</td><td>3</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student41</td><td>Mathematics</td><td>male</td><td>43</td><td>34</td><td>28</td><td>78</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student42</td><td>Languages</td><td>female</td><td>11</td><td>89</td><td>60</td><td>95</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student43</td><td>Mathematics</td><td>male</td><td>48</td><td>92</td><td>18</td><td>88</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student44</td><td>Languages</td><td>female</td><td>82</td><td>2</td><td>59</td><td>73</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student45</td><td>Mathematics</td><td>male</td><td>91</td><td>73</td><td>37</td><td>39</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student46</td><td>Languages</td><td>female</td><td>4</td><td>8</td><td>12</td><td>10</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student47</td><td>Mathematics</td><td>male</td><td>89</td><td>10</td><td>6</td><td>11</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student48</td><td>Languages</td><td>female</td><td>90</td><td>32</td><td>21</td><td>18</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student49</td><td>Mathematics</td><td>male</td><td>42</td><td>49</td><td>49</td><td>72</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+                <tr><td>Student50</td><td>Languages</td><td>female</td><td>56</td><td>37</td><td>67</td><td>54</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>
+            </tbody>
+        </table>
+
+        <div class="pager">
+            Page: <select class="gotoPage"></select>		<img src="~/Scripts/Tablesorter/addons/pager/icons/first.png" class="first" alt="First" title="First page" />
+            <img src="~/Scripts/Tablesorter/addons/pager/icons/prev.png" class="prev" alt="Prev" title="Previous page" />
+            <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+            <img src="~/Scripts/Tablesorter/addons/pager/icons/next.png" class="next" alt="Next" title="Next page" />
+            <img src="~/Scripts/Tablesorter/addons/pager/icons/last.png" class="last" alt="Last" title="Last page" />
+            <select class="pagesize">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+            </select>
+        </div>
+
+
+
+        @Styles.Render("~/bundles/tablesortercss")
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/admindatagrid")
+        @Scripts.Render("~/bundles/tablesorter")
+
+        <script id="js">
+            $(function () {
+
+                var $table = $('table'),
+                    // define pager options
+                    pagerOptions = {
+                        // target the pager markup - see the HTML block below
+                        container: $(".pager"),
+                        // output string - default is '{page}/{totalPages}';
+                        // possible variables: {size}, {page}, {totalPages}, {filteredPages}, {startRow}, {endRow}, {filteredRows} and {totalRows}
+                        // also {page:input} & {startRow:input} will add a modifiable input in place of the value
+                        output: '{startRow} - {endRow} / {filteredRows} ({totalRows})',
+                        // if true, the table will remain the same height no matter how many records are displayed. The space is made up by an empty
+                        // table row set to a height to compensate; default is false
+                        fixedHeight: true,
+                        // remove rows from the table to speed up the sort of large tables.
+                        // setting this to false, only hides the non-visible rows; needed if you plan to add/remove rows with the pager enabled.
+                        removeRows: false,
+                        // go to page selector - select dropdown that sets the current page
+                        cssGoto: '.gotoPage'
+                    };
+
+                // Initialize tablesorter
+                // ***********************
+                $table
+                    .tablesorter({
+                        theme: 'blue',
+                        headerTemplate: '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
+                        widthFixed: true,
+                        widgets: ['zebra', 'filter']
+                    })
+
+                    // initialize the pager plugin
+                    // ****************************
+                    .tablesorterPager(pagerOptions);
+
+                // Add two new rows using the "addRows" method
+                // the "update" method doesn't work here because not all rows are
+                // present in the table when the pager is applied ("removeRows" is false)
+                // ***********************************************************************
+                var r, $row, num = 50,
+                    row = '<tr><td>Student{i}</td><td>{m}</td><td>{g}</td><td>{r}</td><td>{r}</td><td>{r}</td><td>{r}</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>' +
+                        '<tr><td>Student{j}</td><td>{m}</td><td>{g}</td><td>{r}</td><td>{r}</td><td>{r}</td><td>{r}</td><td><button type="button" class="remove" title="Remove this row">X</button></td></tr>';
+                $('button:contains(Add)').click(function () {
+                    // add two rows of random data!
+                    r = row.replace(/\{[gijmr]\}/g, function (m) {
+                        return {
+                            '{i}': num + 1,
+                            '{j}': num + 2,
+                            '{r}': Math.round(Math.random() * 100),
+                            '{g}': Math.random() > 0.5 ? 'male' : 'female',
+                            '{m}': Math.random() > 0.5 ? 'Mathematics' : 'Languages'
+                        }[m];
+                    });
+                    num = num + 2;
+                    $row = $(r);
+                    $table
+                        .find('tbody').append($row)
+                        .trigger('addRows', [$row]);
+                    return false;
+                });
+
+                // Delete a row
+                // *************
+                $table.delegate('button.remove', 'click', function () {
+                    // NOTE this special treatment is only needed if `removeRows` is `true`
+                    // disabling the pager will restore all table rows
+                    $table.trigger('disablePager');
+                    // remove chosen row
+                    $(this).closest('tr').remove();
+                    // restore pager
+                    $table.trigger('enablePager');
+                });
+
+                // Destroy pager / Restore pager
+                // **************
+                $('button:contains(Destroy)').click(function () {
+                    // Exterminate, annhilate, destroy! http://www.youtube.com/watch?v=LOqn8FxuyFs
+                    var $t = $(this);
+                    if (/Destroy/.test($t.text())) {
+                        $table.trigger('destroyPager');
+                        $t.text('Restore Pager');
+                    } else {
+                        $table.tablesorterPager(pagerOptions);
+                        $t.text('Destroy Pager');
+                    }
+                    return false;
+                });
+
+                // Disable / Enable
+                // **************
+                $('.toggle').click(function () {
+                    var mode = /Disable/.test($(this).text());
+                    // triggering disablePager or enablePager
+                    $table.trigger((mode ? 'disable' : 'enable') + 'Pager');
+                    $(this).text((mode ? 'Enable' : 'Disable') + ' Pager');
+                    return false;
+                });
+                $table.bind('pagerChange', function () {
+                    // pager automatically enables when table is sorted.
+                    $('.toggle').text('Disable Pager');
+                });
+
+            });</script>

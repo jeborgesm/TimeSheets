@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="admin_TimeRegistry" Class="TimeRegistryDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=192.168.13.11;Initial Catalog=admin_TimeRegistry;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="admin_TimeRegistryConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Capital_Proyects" Member="Capital_Proyects">
+    <Type Name="Capital_Proyect">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="strGLAccount" Type="System.Char" DbType="VarChar(1)" CanBeNull="true" />
+      <Association Name="Capital_Proyect_Proyect" Member="Proyects" ThisKey="id" OtherKey="id_Capital_Proyects" Type="Proyect" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tasks" Member="Tasks">
+    <Type Name="Task">
+      <Column Name="id" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="strTitle" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="strComment" Type="System.String" DbType="VarChar(1024)" CanBeNull="true" />
+      <Column Name="dtStartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="dtEndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="dtCreation" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="dtLastModification" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+      <Column Name="id_Proyects" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="id_Resource" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="id_Services" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Proyect_Task" Member="Proyect" ThisKey="id_Proyects" OtherKey="id" Type="Proyect" IsForeignKey="true" />
+      <Association Name="Resource_Task" Member="Resource" ThisKey="id_Resource" OtherKey="id" Type="Resource" IsForeignKey="true" />
+      <Association Name="Service_Task" Member="Service" ThisKey="id_Services" OtherKey="id" Type="Service" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Client" Member="Clients">
+    <Type Name="Client">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="strTitle" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="strDescription" Type="System.String" DbType="VarChar(1024)" CanBeNull="true" />
+      <Column Name="dtCreation" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Client_Product" Member="Products" ThisKey="id" OtherKey="id_Client" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Products" Member="Products">
+    <Type Name="Product">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="strTitle" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="id_Client" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Product_Proyect" Member="Proyects" ThisKey="id" OtherKey="id_Products" Type="Proyect" />
+      <Association Name="Client_Product" Member="Client" ThisKey="id_Client" OtherKey="id" Type="Client" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Proyects" Member="Proyects">
+    <Type Name="Proyect">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="strTitle" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="dtStartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="dtEndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="id_Products" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="id_Capital_Proyects" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="id_Resource" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Proyect_Task" Member="Tasks" ThisKey="id" OtherKey="id_Proyects" Type="Task" />
+      <Association Name="Capital_Proyect_Proyect" Member="Capital_Proyect" ThisKey="id_Capital_Proyects" OtherKey="id" Type="Capital_Proyect" IsForeignKey="true" />
+      <Association Name="Product_Proyect" Member="Product" ThisKey="id_Products" OtherKey="id" Type="Product" IsForeignKey="true" />
+      <Association Name="Resource_Proyect" Member="Resource" ThisKey="id_Resource" OtherKey="id" Type="Resource" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Resource" Member="Resources">
+    <Type Name="Resource">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="strName" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="strLastname" Type="System.String" DbType="VarChar(128)" CanBeNull="true" />
+      <Column Name="id_User" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="Resource_Task" Member="Tasks" ThisKey="id" OtherKey="id_Resource" Type="Task" />
+      <Association Name="Resource_Proyect" Member="Proyects" ThisKey="id" OtherKey="id_Resource" Type="Proyect" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Services" Member="Services">
+    <Type Name="Service">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="strTitle" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="strDesc" Type="System.String" DbType="VarChar(1024)" CanBeNull="true" />
+      <Association Name="Service_Task" Member="Tasks" ThisKey="id" OtherKey="id_Services" Type="Task" />
+    </Type>
+  </Table>
+</Database>
