@@ -151,6 +151,24 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Dashboard\bootstrap-responsive.min.css" />
+    <Content Include="Content\Dashboard\img\body-bg.png" />
+    <Content Include="Content\Dashboard\img\glyphicons-halflings-white.html" />
+    <Content Include="Content\Dashboard\img\glyphicons-halflings.html" />
+    <Content Include="Content\Dashboard\img\icons-sa7c41345d9.png" />
+    <Content Include="Content\Dashboard\img\message_avatar1.png" />
+    <Content Include="Content\Dashboard\img\message_avatar2.png" />
+    <Content Include="Content\Dashboard\img\signin\check.png" />
+    <Content Include="Content\Dashboard\img\signin\fb_btn.png" />
+    <Content Include="Content\Dashboard\img\signin\password.png" />
+    <Content Include="Content\Dashboard\img\signin\twitter_btn.png" />
+    <Content Include="Content\Dashboard\img\signin\user.png" />
+    <Content Include="Content\Dashboard\pages\dashboard.css" />
+    <Content Include="Content\Dashboard\pages\faq.css" />
+    <Content Include="Content\Dashboard\pages\plans.css" />
+    <Content Include="Content\Dashboard\pages\reports.css" />
+    <Content Include="Content\Dashboard\pages\signin.css" />
+    <Content Include="Content\Dashboard\style.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts.googleapis.materialicons.css" />
     <Content Include="Content\fonts.googleapis.varelarounds.css" />
