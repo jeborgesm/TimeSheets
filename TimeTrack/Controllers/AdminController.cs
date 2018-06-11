@@ -6,21 +6,20 @@ namespace TimeTrack.Controllers
 {
     public class AdminController : Controller
     {
-        //private ITimeRepository _repository;
+        private Admin _admin;
 
-        //public AdminController() : this(new TimeRepository())
-        //{
-        //}
+        public AdminController() : this(new Admin())
+        {
+        }
 
-        //public AdminController(ITimeRepository repository)
-        //{
-        //    _repository = repository;
-        //}
+        public AdminController(Admin admin)
+        {
+            _admin = admin;
+        }
 
         public ActionResult Index()
         {
-            Admin model = TimeTrack.Models.Admin.GetAllItems();
-            return View(model);
+            return View(_admin);
         }
 
     }

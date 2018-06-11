@@ -10,16 +10,16 @@ namespace TimeTrack.Models
     {
         public IEnumerable<Client> Clients { get; set; }
         public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<Proyect> Proyects { get; set; }
         public IEnumerable<Resource> Resources { get; set; }
 
-        public static Admin GetAllItems()
+        public Admin()
         {
             Time.Data.TimeRepository repo = new TimeRepository();
-            Admin adm = new Admin
-            {
-                Clients = repo.ListAllClients()
-            };
-            return adm;
+            Clients = repo.ListAllClients();
+            Products = repo.ListAllProducts();
+            Proyects = repo.ListAllProyects();
+            Resources = repo.ListAllResources();
         }
     }
 }

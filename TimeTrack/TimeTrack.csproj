@@ -150,6 +150,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\admin.grid.bootstrap.css" />
+    <Content Include="Content\admin.grid.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Dashboard\bootstrap-responsive.min.css" />

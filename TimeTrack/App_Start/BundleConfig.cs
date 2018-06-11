@@ -40,7 +40,11 @@ namespace TimeTrack
                     "~/Scripts/Tablesorter/js/jquery.tablesorter.widgets.js"));
 
             bundles.Add(new StyleBundle("~/bundles/tablesortercss").Include(
-                      "~/Scripts/Tablesorter/css/theme.blue.css",
+                    "~/Content/admin.grid.css",
+                      //Bootstrap v3.x stylesheet-->
+                      "~/Scripts/Tablesorter/css/bootstrap.min.css",
+                      //bootstrap widget theme - ****RENAMED TO theme.bootstrap_3.css * ***-->
+                      "~/Scripts/Tablesorter/css/theme.bootstrap_3.css",
                       "~/Scripts/Tablesorter/addons/pager/jquery.tablesorter.pager.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
