@@ -12,6 +12,7 @@ namespace TimeTrack.Models
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<Proyect> Proyects { get; set; }
         public IEnumerable<Resource> Resources { get; set; }
+        public IEnumerable<Service> Services { get; set; }
 
         public Admin()
         {
@@ -20,6 +21,7 @@ namespace TimeTrack.Models
             Products = repo.ListAllProducts();
             Proyects = repo.ListAllProyects();
             Resources = repo.ListAllResources();
+            Services = repo.ListAllServices();
         }
     }
 }

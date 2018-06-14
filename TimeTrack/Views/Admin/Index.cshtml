@@ -6,7 +6,7 @@
 
 
 <h1>
-    System Management @Html.Raw(Model.Clients.Select(s => s.strTitle).FirstOrDefault())
+    System Management
 </h1>
 
 <div id="tabs">
@@ -14,8 +14,9 @@
         <li class="active"><a data-toggle="tab" id="tabres" href="#tabs-resource">Resources</a></li>
         <li><a data-toggle="tab" id="tabcli" href="#tabs-client">Clients</a></li>
         <li><a data-toggle="tab" id="tabprod" href="#tabs-product">Products</a></li>
-        <li><a data-toggle="tab" id="tabproj" href="#tabs-Project">Projects</a></li>
+        <li><a data-toggle="tab" id="tabproj" href="#tabs-project">Projects</a></li>
         <li><a data-toggle="tab" id="tabsrv" href="#tabs-service">Services</a></li>
+        @*<li><a data-toggle="tab" id="tabdemo" href="#tabs-demo">Demo</a></li>*@
     </ul>
     <div class="tab-content">
         <div id="tabs-resource" class="tab-pane fade in active">
@@ -41,16 +42,40 @@
                                         <label for="selectAll"></label>
                                     </span>
                                 </th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Address</th>
-                                <th>Phone</th>
+                                @foreach (var itm in (new Time.Data.Resource()).GetType().GetProperties())
+                                {
+                                <th>@itm.Name</th>
+                                }
                                 <th class="filter-false remove sorter-false">
                                     Actions
                                 </th>
                             </tr>
                         </thead>
+                        <tfoot>
+                            <tr>
+                                <th class="ts-pager form-inline" colspan="7">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default first" type="button"><span class="glyphicon glyphicon-step-backward"></span></button>
+                                        <button class="btn btn-default prev" type="button"><span class="glyphicon glyphicon-backward"></span></button>
+                                    </div>
+                                    <span class="pagedisplay"></span>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default next" type="button"><span class="glyphicon glyphicon-forward"></span></button>
+                                        <button class="btn btn-default last" type="button"><span class="glyphicon glyphicon-step-forward"></span></button>
+                                    </div>
+                                    <select title="Select page size" class="input-sm pagesize">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">All Rows</option>
+                                    </select>
+                                    <select title="Select page number" class="input-sm pagenum"></select>
+                                </th>
+                            </tr>
+                        </tfoot>
                         <tbody>
+                            @foreach (Time.Data.Resource resource in Model.Resources.ToList())
+                        {
                             <tr>
                                 <td>
                                     <span class="custom-checkbox">
@@ -58,93 +83,20 @@
                                         <label for="checkbox1"></label>
                                     </span>
                                 </td>
-                                <td>Thomas Hardy</td>
-                                <td>thomashardy@mail.com</td>
-                                <td>89 Chiaroscuro Rd, Portland, USA</td>
-                                <td>(171) 555-2222</td>
+                                @foreach (var itm in resource.GetType().GetProperties())
+                            {
+                                <td>
+                                    @resource.GetType().GetProperty(itm.Name).GetValue(resource, null)
+                                </td>
+                        }
                                 <td>
                                     <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                     <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <span class="custom-checkbox">
-                                        <input type="checkbox" id="checkbox2" name="options[]" value="1">
-                                        <label for="checkbox2"></label>
-                                    </span>
-                                </td>
-                                <td>Dominique Perrier</td>
-                                <td>dominiqueperrier@mail.com</td>
-                                <td>Obere Str. 57, Berlin, Germany</td>
-                                <td>(313) 555-5735</td>
-                                <td>
-                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="custom-checkbox">
-                                        <input type="checkbox" id="checkbox3" name="options[]" value="1">
-                                        <label for="checkbox3"></label>
-                                    </span>
-                                </td>
-                                <td>Maria Anders</td>
-                                <td>mariaanders@mail.com</td>
-                                <td>25, rue Lauriston, Paris, France</td>
-                                <td>(503) 555-9931</td>
-                                <td>
-                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="custom-checkbox">
-                                        <input type="checkbox" id="checkbox4" name="options[]" value="1">
-                                        <label for="checkbox4"></label>
-                                    </span>
-                                </td>
-                                <td>Fran Wilson</td>
-                                <td>franwilson@mail.com</td>
-                                <td>C/ Araquil, 67, Madrid, Spain</td>
-                                <td>(204) 619-5731</td>
-                                <td>
-                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="custom-checkbox">
-                                        <input type="checkbox" id="checkbox5" name="options[]" value="1">
-                                        <label for="checkbox5"></label>
-                                    </span>
-                                </td>
-                                <td>Martin Blank</td>
-                                <td>martinblank@mail.com</td>
-                                <td>Via Monte Bianco 34, Turin, Italy</td>
-                                <td>(480) 631-2097</td>
-                                <td>
-                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                </td>
-                            </tr>
+                    }
                         </tbody>
                     </table>
-                    <div class="clearfix">
-                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                        <ul class="pagination">
-                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -162,111 +114,471 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button">Add Rows</button> <button type="button" class="toggle">Disable Pager</button> <button type="button">Destroy Pager</button>
-                    <br><br>
-                        <table>
-                            <!-- bootstrap classes added by the uitheme widget -->
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Major</th>
-                                    <th class="filter-select filter-exact" data-placeholder="Pick a gender">Sex</th>
-                                    <th>English</th>
-                                    <th>Japanese</th>
-                                    <th>Calculus</th>
-                                    <th>Geometry</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Major</th>
-                                    <th>Sex</th>
-                                    <th>English</th>
-                                    <th>Japanese</th>
-                                    <th>Calculus</th>
-                                    <th>Geometry</th>
-                                </tr>
-                                <tr>
-                                    <th class="ts-pager form-inline" colspan="7">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button class="btn btn-default first" type="button"><span class="glyphicon glyphicon-step-backward"></span></button>
-                                            <button class="btn btn-default prev" type="button"><span class="glyphicon glyphicon-backward"></span></button>
-                                        </div>
-                                        <span class="pagedisplay"></span>
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button class="btn btn-default next" type="button"><span class="glyphicon glyphicon-forward"></span></button>
-                                            <button class="btn btn-default last" type="button"><span class="glyphicon glyphicon-step-forward"></span></button>
-                                        </div>
-                                        <select title="Select page size" class="form-control input-sm pagesize">
-                                            <option selected="selected" value="10">10</option>
-                                            <option value="20">20</option>
-                                            <option value="30">30</option>
-                                            <option value="all">All Rows</option>
-                                        </select>
-                                        <select title="Select page number" class="form-control input-sm pagenum"></select>
-                                    </th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                <tr><td>Student01</td><td>Languages</td><td>male</td><td>80</td><td>70</td><td>75</td><td>80</td></tr>
-                                <tr><td>Student02</td><td>Mathematics</td><td>male</td><td>90</td><td>88</td><td>100</td><td>90</td></tr>
-                                <tr><td>Student03</td><td>Languages</td><td>female</td><td>85</td><td>95</td><td>80</td><td>85</td></tr>
-                                <tr><td>Student04</td><td>Languages</td><td>male</td><td>60</td><td>55</td><td>100</td><td>100</td></tr>
-                                <tr><td>Student05</td><td>Languages</td><td>female</td><td>68</td><td>80</td><td>95</td><td>80</td></tr>
-                                <tr><td>Student06</td><td>Mathematics</td><td>male</td><td>100</td><td>99</td><td>100</td><td>90</td></tr>
-                                <tr><td>Student07</td><td>Mathematics</td><td>male</td><td>85</td><td>68</td><td>90</td><td>90</td></tr>
-                                <tr><td>Student08</td><td>Languages</td><td>male</td><td>100</td><td>90</td><td>90</td><td>85</td></tr>
-                                <tr><td>Student09</td><td>Mathematics</td><td>male</td><td>80</td><td>50</td><td>65</td><td>75</td></tr>
-                                <tr><td>Student10</td><td>Languages</td><td>male</td><td>85</td><td>100</td><td>100</td><td>90</td></tr>
-                                <tr><td>Student11</td><td>Languages</td><td>male</td><td>86</td><td>85</td><td>100</td><td>100</td></tr>
-                                <tr><td>Student12</td><td>Mathematics</td><td>female</td><td>100</td><td>75</td><td>70</td><td>85</td></tr>
-                                <tr><td>Student13</td><td>Languages</td><td>female</td><td>100</td><td>80</td><td>100</td><td>90</td></tr>
-                                <tr><td>Student14</td><td>Languages</td><td>female</td><td>50</td><td>45</td><td>55</td><td>90</td></tr>
-                                <tr><td>Student15</td><td>Languages</td><td>male</td><td>95</td><td>35</td><td>100</td><td>90</td></tr>
-                                <tr><td>Student16</td><td>Languages</td><td>female</td><td>100</td><td>50</td><td>30</td><td>70</td></tr>
-                                <tr><td>Student17</td><td>Languages</td><td>female</td><td>80</td><td>100</td><td>55</td><td>65</td></tr>
-                                <tr><td>Student18</td><td>Mathematics</td><td>male</td><td>30</td><td>49</td><td>55</td><td>75</td></tr>
-                                <tr><td>Student19</td><td>Languages</td><td>male</td><td>68</td><td>90</td><td>88</td><td>70</td></tr>
-                                <tr><td>Student20</td><td>Mathematics</td><td>male</td><td>40</td><td>45</td><td>40</td><td>80</td></tr>
-                                <tr><td>Student21</td><td>Languages</td><td>male</td><td>50</td><td>45</td><td>100</td><td>100</td></tr>
-                                <tr><td>Student22</td><td>Mathematics</td><td>male</td><td>100</td><td>99</td><td>100</td><td>90</td></tr>
-                                <tr><td>Student23</td><td>Mathematics</td><td>male</td><td>82</td><td>77</td><td>0</td><td>79</td></tr>
-                                <tr><td>Student24</td><td>Languages</td><td>female</td><td>100</td><td>91</td><td>13</td><td>82</td></tr>
-                                <tr><td>Student25</td><td>Mathematics</td><td>male</td><td>22</td><td>96</td><td>82</td><td>53</td></tr>
-                                <tr><td>Student26</td><td>Languages</td><td>female</td><td>37</td><td>29</td><td>56</td><td>59</td></tr>
-                                <tr><td>Student27</td><td>Mathematics</td><td>male</td><td>86</td><td>82</td><td>69</td><td>23</td></tr>
-                                <tr><td>Student28</td><td>Languages</td><td>female</td><td>44</td><td>25</td><td>43</td><td>1</td></tr>
-                                <tr><td>Student29</td><td>Mathematics</td><td>male</td><td>77</td><td>47</td><td>22</td><td>38</td></tr>
-                                <tr><td>Student30</td><td>Languages</td><td>female</td><td>19</td><td>35</td><td>23</td><td>10</td></tr>
-                                <tr><td>Student31</td><td>Mathematics</td><td>male</td><td>90</td><td>27</td><td>17</td><td>50</td></tr>
-                                <tr><td>Student32</td><td>Languages</td><td>female</td><td>60</td><td>75</td><td>33</td><td>38</td></tr>
-                                <tr><td>Student33</td><td>Mathematics</td><td>male</td><td>4</td><td>31</td><td>37</td><td>15</td></tr>
-                                <tr><td>Student34</td><td>Languages</td><td>female</td><td>77</td><td>97</td><td>81</td><td>44</td></tr>
-                                <tr><td>Student35</td><td>Mathematics</td><td>male</td><td>5</td><td>81</td><td>51</td><td>95</td></tr>
-                                <tr><td>Student36</td><td>Languages</td><td>female</td><td>70</td><td>61</td><td>70</td><td>94</td></tr>
-                                <tr><td>Student37</td><td>Mathematics</td><td>male</td><td>60</td><td>3</td><td>61</td><td>84</td></tr>
-                                <tr><td>Student38</td><td>Languages</td><td>female</td><td>63</td><td>39</td><td>0</td><td>11</td></tr>
-                                <tr><td>Student39</td><td>Mathematics</td><td>male</td><td>50</td><td>46</td><td>32</td><td>38</td></tr>
-                                <tr><td>Student40</td><td>Languages</td><td>female</td><td>51</td><td>75</td><td>25</td><td>3</td></tr>
-                                <tr><td>Student41</td><td>Mathematics</td><td>male</td><td>43</td><td>34</td><td>28</td><td>78</td></tr>
-                                <tr><td>Student42</td><td>Languages</td><td>female</td><td>11</td><td>89</td><td>60</td><td>95</td></tr>
-                                <tr><td>Student43</td><td>Mathematics</td><td>male</td><td>48</td><td>92</td><td>18</td><td>88</td></tr>
-                                <tr><td>Student44</td><td>Languages</td><td>female</td><td>82</td><td>2</td><td>59</td><td>73</td></tr>
-                                <tr><td>Student45</td><td>Mathematics</td><td>male</td><td>91</td><td>73</td><td>37</td><td>39</td></tr>
-                                <tr><td>Student46</td><td>Languages</td><td>female</td><td>4</td><td>8</td><td>12</td><td>10</td></tr>
-                                <tr><td>Student47</td><td>Mathematics</td><td>male</td><td>89</td><td>10</td><td>6</td><td>11</td></tr>
-                                <tr><td>Student48</td><td>Languages</td><td>female</td><td>90</td><td>32</td><td>21</td><td>18</td></tr>
-                                <tr><td>Student49</td><td>Mathematics</td><td>male</td><td>42</td><td>49</td><td>49</td><td>72</td></tr>
-                                <tr><td>Student50</td><td>Languages</td><td>female</td><td>56</td><td>37</td><td>67</td><td>54</td></tr>
-                            </tbody>
-                        </table>
+                    <table class="table table-striped table-hover tablesorter-bootstrap">
+                        <thead>
+                            <tr>
+                                <th class="filter-false remove sorter-false">
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll"></label>
+                                    </span>
+                                </th>
+                                @foreach (var itm in (new Time.Data.Client()).GetType().GetProperties())
+                            {
+                                <th>@itm.Name</th>
+                        }
+                                <th class="filter-false remove sorter-false">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th class="ts-pager form-inline" colspan="7">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default first" type="button"><span class="glyphicon glyphicon-step-backward"></span></button>
+                                        <button class="btn btn-default prev" type="button"><span class="glyphicon glyphicon-backward"></span></button>
+                                    </div>
+                                    <span class="pagedisplay"></span>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default next" type="button"><span class="glyphicon glyphicon-forward"></span></button>
+                                        <button class="btn btn-default last" type="button"><span class="glyphicon glyphicon-step-forward"></span></button>
+                                    </div>
+                                    <select title="Select page size" class="input-sm pagesize">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">All Rows</option>
+                                    </select>
+                                    <select title="Select page number" class="input-sm pagenum"></select>
+                                </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (Time.Data.Client client in Model.Clients.ToList())
+                        {
+                            <tr>
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                        <label for="checkbox1"></label>
+                                    </span>
+                                </td>
+                                @foreach (var itm in client.GetType().GetProperties())
+                            {
+                                <td>
+                                    @client.GetType().GetProperty(itm.Name).GetValue(client, null)
+                                </td>
+                        }
+                                <td>
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                </td>
+                            </tr>
+                    }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
         <div id="tabs-product" class="tab-pane fade">
-            <h3>Menu 2</h3>
-            <p>Some content in menu 2.</p>
+            <div class="container body-content">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>Manage <b>Products</b></h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+                                <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover tablesorter-bootstrap">
+                        <thead>
+                            <tr>
+                                <th class="filter-false remove sorter-false">
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll"></label>
+                                    </span>
+                                </th>
+                                @foreach (var itm in (new Time.Data.Product()).GetType().GetProperties())
+                            {
+                                <th>@itm.Name</th>
+                        }
+                                <th class="filter-false remove sorter-false">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th class="ts-pager form-inline" colspan="7">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default first" type="button"><span class="glyphicon glyphicon-step-backward"></span></button>
+                                        <button class="btn btn-default prev" type="button"><span class="glyphicon glyphicon-backward"></span></button>
+                                    </div>
+                                    <span class="pagedisplay"></span>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default next" type="button"><span class="glyphicon glyphicon-forward"></span></button>
+                                        <button class="btn btn-default last" type="button"><span class="glyphicon glyphicon-step-forward"></span></button>
+                                    </div>
+                                    <select title="Select page size" class="input-sm pagesize">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">All Rows</option>
+                                    </select>
+                                    <select title="Select page number" class="input-sm pagenum"></select>
+                                </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (Time.Data.Product product in Model.Products.ToList())
+                        {
+                            <tr>
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                        <label for="checkbox1"></label>
+                                    </span>
+                                </td>
+                                @foreach (var itm in product.GetType().GetProperties())
+                            {
+                                <td>
+                                    @product.GetType().GetProperty(itm.Name).GetValue(product, null)
+                                </td>
+                        }
+                                <td>
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                </td>
+                            </tr>
+                    }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="tabs-project" class="tab-pane fade">
+            <div class="container body-content">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>Manage <b>Projects</b></h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+                                <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover tablesorter-bootstrap">
+                        <thead>
+                            <tr>
+                                <th class="filter-false remove sorter-false">
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll"></label>
+                                    </span>
+                                </th>
+                                @foreach (var itm in (Model.Proyects.ToList()[0]).GetType().GetProperties())
+                                {
+                                <th>@itm.Name</th>
+                                }
+                                <th class="filter-false remove sorter-false">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th class="ts-pager form-inline" colspan="10">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default first" type="button"><span class="glyphicon glyphicon-step-backward"></span></button>
+                                        <button class="btn btn-default prev" type="button"><span class="glyphicon glyphicon-backward"></span></button>
+                                    </div>
+                                    <span class="pagedisplay"></span>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default next" type="button"><span class="glyphicon glyphicon-forward"></span></button>
+                                        <button class="btn btn-default last" type="button"><span class="glyphicon glyphicon-step-forward"></span></button>
+                                    </div>
+                                    <select title="Select page size" class="input-sm pagesize">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">All Rows</option>
+                                    </select>
+                                    <select title="Select page number" class="input-sm pagenum"></select>
+                                </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (Time.Data.Proyect project in Model.Proyects.ToList())
+                            {
+                            <tr>
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                        <label for="checkbox1"></label>
+                                    </span>
+                                </td>
+                                @foreach (var itm in project.GetType().GetProperties())
+                                {
+                                <td>
+                                    @project.GetType().GetProperty(itm.Name).GetValue(project, null)
+                                </td>
+                                }
+                                <td>
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="tabs-service" class="tab-pane fade">
+            <div class="container body-content">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>Manage <b>Services</b></h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+                                <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover tablesorter-bootstrap">
+                        <thead>
+                            <tr>
+                                <th class="filter-false remove sorter-false">
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll"></label>
+                                    </span>
+                                </th>
+                                @foreach (var itm in (new Time.Data.Service()).GetType().GetProperties())
+                                {
+                                <th>@itm.Name</th>
+                                }
+                                <th class="filter-false remove sorter-false">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th class="ts-pager form-inline" colspan="7">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default first" type="button"><span class="glyphicon glyphicon-step-backward"></span></button>
+                                        <button class="btn btn-default prev" type="button"><span class="glyphicon glyphicon-backward"></span></button>
+                                    </div>
+                                    <span class="pagedisplay"></span>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default next" type="button"><span class="glyphicon glyphicon-forward"></span></button>
+                                        <button class="btn btn-default last" type="button"><span class="glyphicon glyphicon-step-forward"></span></button>
+                                    </div>
+                                    <select title="Select page size" class="input-sm pagesize">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">All Rows</option>
+                                    </select>
+                                    <select title="Select page number" class="input-sm pagenum"></select>
+                                </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (Time.Data.Service service in Model.Services.ToList())
+                            {
+                            <tr>
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                        <label for="checkbox1"></label>
+                                    </span>
+                                </td>
+                                @foreach (var itm in service.GetType().GetProperties())
+                            {
+                                <td>
+                                    @service.GetType().GetProperty(itm.Name).GetValue(service, null)
+                                </td>
+                        }
+                                <td>
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                </td>
+                            </tr>
+                    }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="tabs-demo" class="tab-pane fade">
+            <div class="container body-content">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>Manage <b>DEMO</b></h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+                                <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button">Add Rows</button> <button type="button" class="toggle">Disable Pager</button> <button type="button">Destroy Pager</button>
+                    <br><br>
+                    <table>
+                        <!-- bootstrap classes added by the uitheme widget -->
+                        <thead>
+                            <tr>
+                                <th class="filter-false remove sorter-false">
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll"></label>
+                                    </span>
+                                </th>
+                                <th>Name</th>
+                                <th>Major</th>
+                                <th class="filter-select filter-exact" data-placeholder="Pick a gender">Sex</th>
+                                <th>English</th>
+                                <th>Japanese</th>
+                                <th>Calculus</th>
+                                <th>Geometry</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th class="filter-false remove sorter-false">
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll"></label>
+                                    </span>
+                                </th>
+                                <th>Name</th>
+                                <th>Major</th>
+                                <th>Sex</th>
+                                <th>English</th>
+                                <th>Japanese</th>
+                                <th>Calculus</th>
+                                <th>Geometry</th>
+                            </tr>
+                            <tr>
+                                <th class="ts-pager form-inline" colspan="7">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default first" type="button"><span class="glyphicon glyphicon-step-backward"></span></button>
+                                        <button class="btn btn-default prev" type="button"><span class="glyphicon glyphicon-backward"></span></button>
+                                    </div>
+                                    <span class="pagedisplay"></span>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-default next" type="button"><span class="glyphicon glyphicon-forward"></span></button>
+                                        <button class="btn btn-default last" type="button"><span class="glyphicon glyphicon-step-forward"></span></button>
+                                    </div>
+                                    <select title="Select page size" class="input-sm pagesize">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">All Rows</option>
+                                    </select>
+                                    <select title="Select page number" class="input-sm pagenum"></select>
+                                </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                        <label for="checkbox1"></label>
+                                    </span>
+                                </td>
+                                <td>Student01</td>
+                                <td>Languages</td>
+                                <td>male</td>
+                                <td>80</td>
+                                <td>70</td>
+                                <td>75</td>
+                                <td>80</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox2" name="options[]" value="1">
+                                        <label for="checkbox2"></label>
+                                    </span>
+                                </td>
+                                <td>Student02</td>
+                                <td>Mathematics</td>
+                                <td>male</td>
+                                <td>90</td>
+                                <td>88</td>
+                                <td>100</td>
+                                <td>90</td>
+                            </tr>
+                            <tr><td>Student03</td><td>Languages</td><td>female</td><td>85</td><td>95</td><td>80</td><td>85</td></tr>
+                            <tr><td>Student04</td><td>Languages</td><td>male</td><td>60</td><td>55</td><td>100</td><td>100</td></tr>
+                            <tr><td>Student05</td><td>Languages</td><td>female</td><td>68</td><td>80</td><td>95</td><td>80</td></tr>
+                            <tr><td>Student06</td><td>Mathematics</td><td>male</td><td>100</td><td>99</td><td>100</td><td>90</td></tr>
+                            <tr><td>Student07</td><td>Mathematics</td><td>male</td><td>85</td><td>68</td><td>90</td><td>90</td></tr>
+                            <tr><td>Student08</td><td>Languages</td><td>male</td><td>100</td><td>90</td><td>90</td><td>85</td></tr>
+                            <tr><td>Student09</td><td>Mathematics</td><td>male</td><td>80</td><td>50</td><td>65</td><td>75</td></tr>
+                            <tr><td>Student10</td><td>Languages</td><td>male</td><td>85</td><td>100</td><td>100</td><td>90</td></tr>
+                            <tr><td>Student11</td><td>Languages</td><td>male</td><td>86</td><td>85</td><td>100</td><td>100</td></tr>
+                            <tr><td>Student12</td><td>Mathematics</td><td>female</td><td>100</td><td>75</td><td>70</td><td>85</td></tr>
+                            <tr><td>Student13</td><td>Languages</td><td>female</td><td>100</td><td>80</td><td>100</td><td>90</td></tr>
+                            <tr><td>Student14</td><td>Languages</td><td>female</td><td>50</td><td>45</td><td>55</td><td>90</td></tr>
+                            <tr><td>Student15</td><td>Languages</td><td>male</td><td>95</td><td>35</td><td>100</td><td>90</td></tr>
+                            <tr><td>Student16</td><td>Languages</td><td>female</td><td>100</td><td>50</td><td>30</td><td>70</td></tr>
+                            <tr><td>Student17</td><td>Languages</td><td>female</td><td>80</td><td>100</td><td>55</td><td>65</td></tr>
+                            <tr><td>Student18</td><td>Mathematics</td><td>male</td><td>30</td><td>49</td><td>55</td><td>75</td></tr>
+                            <tr><td>Student19</td><td>Languages</td><td>male</td><td>68</td><td>90</td><td>88</td><td>70</td></tr>
+                            <tr><td>Student20</td><td>Mathematics</td><td>male</td><td>40</td><td>45</td><td>40</td><td>80</td></tr>
+                            <tr><td>Student21</td><td>Languages</td><td>male</td><td>50</td><td>45</td><td>100</td><td>100</td></tr>
+                            <tr><td>Student22</td><td>Mathematics</td><td>male</td><td>100</td><td>99</td><td>100</td><td>90</td></tr>
+                            <tr><td>Student23</td><td>Mathematics</td><td>male</td><td>82</td><td>77</td><td>0</td><td>79</td></tr>
+                            <tr><td>Student24</td><td>Languages</td><td>female</td><td>100</td><td>91</td><td>13</td><td>82</td></tr>
+                            <tr><td>Student25</td><td>Mathematics</td><td>male</td><td>22</td><td>96</td><td>82</td><td>53</td></tr>
+                            <tr><td>Student26</td><td>Languages</td><td>female</td><td>37</td><td>29</td><td>56</td><td>59</td></tr>
+                            <tr><td>Student27</td><td>Mathematics</td><td>male</td><td>86</td><td>82</td><td>69</td><td>23</td></tr>
+                            <tr><td>Student28</td><td>Languages</td><td>female</td><td>44</td><td>25</td><td>43</td><td>1</td></tr>
+                            <tr><td>Student29</td><td>Mathematics</td><td>male</td><td>77</td><td>47</td><td>22</td><td>38</td></tr>
+                            <tr><td>Student30</td><td>Languages</td><td>female</td><td>19</td><td>35</td><td>23</td><td>10</td></tr>
+                            <tr><td>Student31</td><td>Mathematics</td><td>male</td><td>90</td><td>27</td><td>17</td><td>50</td></tr>
+                            <tr><td>Student32</td><td>Languages</td><td>female</td><td>60</td><td>75</td><td>33</td><td>38</td></tr>
+                            <tr><td>Student33</td><td>Mathematics</td><td>male</td><td>4</td><td>31</td><td>37</td><td>15</td></tr>
+                            <tr><td>Student34</td><td>Languages</td><td>female</td><td>77</td><td>97</td><td>81</td><td>44</td></tr>
+                            <tr><td>Student35</td><td>Mathematics</td><td>male</td><td>5</td><td>81</td><td>51</td><td>95</td></tr>
+                            <tr><td>Student36</td><td>Languages</td><td>female</td><td>70</td><td>61</td><td>70</td><td>94</td></tr>
+                            <tr><td>Student37</td><td>Mathematics</td><td>male</td><td>60</td><td>3</td><td>61</td><td>84</td></tr>
+                            <tr><td>Student38</td><td>Languages</td><td>female</td><td>63</td><td>39</td><td>0</td><td>11</td></tr>
+                            <tr><td>Student39</td><td>Mathematics</td><td>male</td><td>50</td><td>46</td><td>32</td><td>38</td></tr>
+                            <tr><td>Student40</td><td>Languages</td><td>female</td><td>51</td><td>75</td><td>25</td><td>3</td></tr>
+                            <tr><td>Student41</td><td>Mathematics</td><td>male</td><td>43</td><td>34</td><td>28</td><td>78</td></tr>
+                            <tr><td>Student42</td><td>Languages</td><td>female</td><td>11</td><td>89</td><td>60</td><td>95</td></tr>
+                            <tr><td>Student43</td><td>Mathematics</td><td>male</td><td>48</td><td>92</td><td>18</td><td>88</td></tr>
+                            <tr><td>Student44</td><td>Languages</td><td>female</td><td>82</td><td>2</td><td>59</td><td>73</td></tr>
+                            <tr><td>Student45</td><td>Mathematics</td><td>male</td><td>91</td><td>73</td><td>37</td><td>39</td></tr>
+                            <tr><td>Student46</td><td>Languages</td><td>female</td><td>4</td><td>8</td><td>12</td><td>10</td></tr>
+                            <tr><td>Student47</td><td>Mathematics</td><td>male</td><td>89</td><td>10</td><td>6</td><td>11</td></tr>
+                            <tr><td>Student48</td><td>Languages</td><td>female</td><td>90</td><td>32</td><td>21</td><td>18</td></tr>
+                            <tr><td>Student49</td><td>Mathematics</td><td>male</td><td>42</td><td>49</td><td>49</td><td>72</td></tr>
+                            <tr><td>Student50</td><td>Languages</td><td>female</td><td>56</td><td>37</td><td>67</td><td>54</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     @*<div id="tabs-resource">
@@ -381,36 +693,6 @@
 </div>
 
 
-
-
-<div id="banner">
-<h1>table<em>sorter</em></h1>
-<h2>Pager plugin + Filter widget</h2>
-<h3>Flexible client-side table sorting</h3>
-<a href="index.html">Back to documentation</a>
-</div>
-
-<p class="tip">
-    <em>NOTE!</em> The following are not part of the original plugin:
-</p>
-<ul>
-    <li>
-        In <span class="version updated">v2.23.0</span>, the following methods were changed due to issues with unique namespacing.
-        <ul>
-            <li><code>destroy.pager</code> is now <code>destroyPager</code></li>
-            <li><code>disable.pager</code> is now <code>disablePager</code></li>
-            <li><code>enable.pager</code> is now <code>enablePager</code></li>
-        </ul>
-    </li>
-    <li>When using this pager plugin with the filter widget, make sure that the <code>removeRows</code> option is set to <code>false</code> or it won't work.</li>
-    <li>This combination was not possible in tablesorter versions prior to version 2.4.</li>
-    <li>This combination can not be applied to the original tablesorter.</li>
-</ul>
-
-
-
-
-
 @Styles.Render("~/bundles/tablesortercss")
 
 @Scripts.Render("~/bundles/jquery")
@@ -440,7 +722,7 @@
     $table.tablesorter({
         theme: 'bootstrap',
         headerTemplate: '{content} {icon}',
-        sortList: [[0, 0], [1, 0], [2, 0]],
+        sortList: [[1, 0]],
         widgets: ['zebra', 'columns', 'filter', 'uitheme']
     });
 
